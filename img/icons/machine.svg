@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none" stroke="#4f46e5" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Person sitting -->
+    <path d="M30 60 L30 80 L50 80" /> <!-- Legs -->
+    <line x1="30" y1="60" x2="30" y2="40" /> <!-- Torso -->
+    <circle cx="30" cy="30" r="8" /> <!-- Head -->
+    
+    <!-- Machine/Leg Press Plate -->
+    <line x1="50" y1="70" x2="50" y2="90" stroke="#1e293b" stroke-width="4" />
+    <line x1="50" y1="80" x2="80" y2="50" stroke="#cbd5e1" stroke-width="2" /> <!-- Force line -->
+</svg>

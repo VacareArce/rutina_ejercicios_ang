@@ -1,0 +1,16 @@
+/* 
+  Estilos personalizados para la aplicación.
+  
+  Nota: La mayoría de los estilos provienen de Tailwind CSS,
+  por lo que este archivo se mantiene ligero para personalizaciones específicas.
+*/
+
+/* Ejemplo de personalización de barra de desplazamiento (opcional) */
+.hide-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}

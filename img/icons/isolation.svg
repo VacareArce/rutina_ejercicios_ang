@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none" stroke="#4f46e5" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Dumbbell Left -->
+  <rect x="25" y="35" width="10" height="30" rx="2" fill="#1e293b" stroke="none" />
+  <!-- Handle -->
+  <line x1="35" y1="50" x2="65" y2="50" stroke="#1e293b" stroke-width="8" />
+  <!-- Dumbbell Right -->
+  <rect x="65" y="35" width="10" height="30" rx="2" fill="#1e293b" stroke="none" />
+  
+  <!-- Motion Lines -->
+  <path d="M40 20 Q 50 10 60 20" stroke="#cbd5e1" stroke-width="3" />
+  <path d="M40 80 Q 50 90 60 80" stroke="#cbd5e1" stroke-width="3" />
+</svg>
