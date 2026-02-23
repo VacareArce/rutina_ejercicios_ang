@@ -1,9 +1,30 @@
-// Extraemos useState de la variable global de React
-const { useState } = React;
+// Extraemos useState y useEffect de la variable global de React
+const { useState, useEffect } = React;
 
 function App() {
     const [activeTab, setActiveTab] = useState(0);
-    const [userProgress, setUserProgress] = useState({});
+
+    // Inicializar estado desde localStorage o por defecto vacio.
+    const [userProgress, setUserProgress] = useState(() => {
+        try {
+            const saved = localStorage.getItem('rutina_geli_progress');
+            if (saved) {
+                return JSON.parse(saved);
+            }
+        } catch (e) {
+            console.error("No se pudo cargar el progreso", e);
+        }
+        return {};
+    });
+
+    // Efecto para guardar en localStorage cada vez que userProgress cambie
+    useEffect(() => {
+        try {
+            localStorage.setItem('rutina_geli_progress', JSON.stringify(userProgress));
+        } catch (e) {
+            console.error("No se pudo guardar el progreso", e);
+        }
+    }, [userProgress]);
 
     const activeDayData = routineData[activeTab];
 
@@ -27,6 +48,21 @@ function App() {
         }));
     };
 
+    // Función para reiniciar solo los checks de completado (mantiene pesos)
+    const reiniciarCiclo = () => {
+        if (confirm("¡Felicidades por terminar la semana! ¿Estás segura de reiniciar los ejercicios marcados como listos? (Tus pesos se conservarán)")) {
+            setUserProgress(prev => {
+                const nuevoProgreso = { ...prev };
+                for (const exerciseId in nuevoProgreso) {
+                    if (nuevoProgreso[exerciseId]) {
+                        nuevoProgreso[exerciseId].completed = false;
+                    }
+                }
+                return nuevoProgreso;
+            });
+        }
+    };
+
     const completedToday = activeDayData.exercises.filter(ex => userProgress[ex.id]?.completed).length;
     const totalToday = activeDayData.exercises.length;
     const progressPercentage = (completedToday / totalToday) * 100;
@@ -37,15 +73,29 @@ function App() {
 
     return (
         <div className="min-h-screen bg-gray-50 text-slate-800 font-sans pb-12">
-            <header className="bg-indigo-600 text-white shadow-lg sticky top-0 z-10">
-                <div className="max-w-4xl mx-auto px-4 py-6">
-                    <h1 className="text-2xl md:text-3xl font-bold flex items-center gap-3">
-                        <DumbbellIcon className="w-8 h-8" />
-                        Mi Rastreador de Rutina
-                    </h1>
-                    <p className="text-indigo-200 mt-2 text-sm md:text-base">
-                        Tu plan de 5 días enfocado en piernas, glúteos y torso estético.
-                    </p>
+            <header className="bg-gradient-to-r from-indigo-700 to-purple-600 text-white shadow-lg sticky top-0 z-10">
+                <div className="max-w-4xl mx-auto px-4 py-8">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <div>
+                            <p className="text-purple-200 font-semibold mb-1 tracking-wider uppercase text-sm">
+                                ¡Vamos que se puede! 💪✨
+                            </p>
+                            <h1 className="text-3xl md:text-5xl font-black flex items-center gap-3 drop-shadow-md">
+                                GeliStrong <DumbbellIcon className="w-8 h-8 md:w-10 md:h-10 text-pink-300" />
+                            </h1>
+                            <p className="text-indigo-100 mt-2 text-base md:text-lg">
+                                Tu momento de fuerza, disciplina y amor propio. ¡Hagamos que hoy cuente, Angélica!
+                            </p>
+                        </div>
+
+                        <button
+                            onClick={reiniciarCiclo}
+                            className="bg-white/20 hover:bg-white/30 backdrop-blur border border-white/30 text-white px-5 py-2.5 rounded-xl font-bold transition-all shadow-sm flex items-center gap-2 w-fit text-sm"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /><path d="M3 3v5h5" /></svg>
+                            Nuevo Ciclo (Semana nueva)
+                        </button>
+                    </div>
                 </div>
 
                 <div className="max-w-4xl mx-auto px-4">
@@ -55,8 +105,8 @@ function App() {
                                 key={day.day}
                                 onClick={() => setActiveTab(index)}
                                 className={`whitespace-nowrap px-5 py-2.5 rounded-full font-medium transition-all duration-300 text-sm md:text-base ${activeTab === index
-                                    ? 'bg-white text-indigo-600 shadow-md'
-                                    : 'bg-indigo-500/50 text-indigo-50 hover:bg-indigo-500'
+                                    ? 'bg-white text-indigo-700 shadow-md font-bold'
+                                    : 'bg-indigo-900/40 text-indigo-50 hover:bg-indigo-900/60'
                                     }`}
                             >
                                 Día {day.day}
@@ -347,7 +397,10 @@ function App() {
             </main>
 
             <footer className="max-w-4xl mx-auto px-4 mt-12 text-center text-slate-500 text-sm">
-                <p>Los datos (pesos y progreso) se guardan temporalmente en la memoria durante esta sesión.</p>
+                <p className="flex items-center justify-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-emerald-500 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" /><polyline points="17 21 17 13 7 13 7 21" /><polyline points="7 3 7 8 15 8" /></svg>
+                    Tu progreso y tus pesos se guardan automáticamente en tu navegador.
+                </p>
             </footer>
         </div>
     );
