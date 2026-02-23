@@ -73,7 +73,7 @@ function App() {
 
     return (
         <div className="min-h-screen bg-gray-50 text-slate-800 font-sans pb-12">
-            <header className="bg-gradient-to-r from-indigo-700 to-purple-600 text-white shadow-lg sticky top-0 z-10">
+            <header className="bg-gradient-to-r from-indigo-700 to-purple-600 text-white shadow-lg sticky top-0 z-50">
                 <div className="max-w-4xl mx-auto px-4 py-8">
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                         <div>
